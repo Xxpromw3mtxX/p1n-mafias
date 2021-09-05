@@ -15,6 +15,7 @@ A simple mafias script using nh-context - Rewrote by lilfraae a.k.a. Xxpromw3mtx
 * Required:
     * [ESX](https://github.com/esx-framework/esx-legacy/tree/main/%5Besx%5D/es_extended)
     * [esx_inventoryhud](https://github.com/Trsak/esx_inventoryhud)
+    * [esx_society](https://github.com/esx-framework/esx-legacy/tree/main/%5Besx_addons%5D/esx_society)
 * Optional:
     * None
 
