@@ -1,5 +1,5 @@
 # p1n-mafias
-A simple mafias script using nh-context - Rewrote by lilfraae a.k.a. Xxpromw3mtxX
+A simple mafias script - Rewrote by lilfraae a.k.a. Xxpromw3mtxX
 
 ## Creating Issue
 * Check the [Closed Topics](https://github.com/xxpromw3mtxx/p1n-mafias/issues?q=is%3Aissue+is%3Aclosed) & [Wiki](https://github.com/Xxpromw3mtxX/p1n-mafias/wiki) before opening an issue to see if your issue has already been Answered.
@@ -51,7 +51,7 @@ A simple mafias script using nh-context - Rewrote by lilfraae a.k.a. Xxpromw3mtx
 
 ## Legal
 ### License
-p1n-mafias - A simple mafias script using nh-context
+p1n-mafias - A simple mafias script
 
 Copyright (C) 2011-2021 lilfraae/Xxprom3mtxX
 
