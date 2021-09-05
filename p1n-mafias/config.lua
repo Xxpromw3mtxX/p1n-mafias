@@ -2,17 +2,14 @@ Config = {}
 
 Config.Locale = 'it'
 
-Config.mafias = {
-    --[[{
-        Name = 'Mafia1',
-        job = 'police',
-        point = vector3(-803.833, 184.6375, 72.605),
-    },]]
+Config.TickTime = 1000
 
-    -- Template for adding more gangs/mafias
-    --[[{
-        Name = 'Mafia1',
-        job = 'police',
-        point = vector3(-803.833, 184.6375, 72.605),
-    },]]
+Config.mafias = {
+    {
+        Name = 'Cartello',
+        job = 'cartel',
+        inV = vector3(1405.7, 1137.6, 109.7),
+        bossM = vector3(1395.1, 1160.1, 114.3),
+        cloaK = vector3(1394.9, 1157, 114.3)
+    },
 }
