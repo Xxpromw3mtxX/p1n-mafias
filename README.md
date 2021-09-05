@@ -27,6 +27,21 @@ A simple mafias script using nh-context - Rewrote by lilfraae a.k.a. Xxpromw3mtx
 5. You're set!
 6. **Do not change the name or it will not work.**
 
+## Add more Gang or Mafia
+1. Open the `config.lua` file.
+2. Inside the `Config.mafias` statement add this code for each gang or mafia you want to add:
+```
+    {
+        Name = 'Cartello', --The name is pretty much a reminder for you
+        job = 'cartel', --This is important, this HAVE to be the name of the job inside your database
+        inV = vector3(1405.7, 1137.6, 109.7), --Inventory coordinates
+        bossM = vector3(1395.1, 1160.1, 114.3), --Boos Menu coordinates
+        cloaK = vector3(1394.9, 1157, 114.3) --Cloackroom coordinates
+    },
+```
+3. Use the included SQL file and change the sets flags (**NOT TESTED**).
+4. You're set!
+
 ## Known Bugs/Issues
 * None for now
 
