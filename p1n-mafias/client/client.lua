@@ -17,73 +17,49 @@ AddEventHandler('esx:setJob', function(job)
 end)
 
 CreateThread(function()
-    while true do 
-        local wait = 1000
+    while true do
+        local wait = Config.TickTime
         for k,v in pairs(Config.mafias) do 
-                if ESX.PlayerData.job and ESX.PlayerData.job.name == v.job then 
+            if ESX.PlayerData.job and ESX.PlayerData.job.name == v.job then 
                 local _pos = GetEntityCoords(PlayerPedId())
-                local _dist = #(_pos - v.point) < 3
-                if _dist then 
+                local inventory = #(_pos - v.inV) < 3
+                local boss = #(_pos - v.bossM) < 3
+                local cloakroom = #(_pos - v.cloaK) < 3
+
+                if inventory then
                     wait = 0
-                    ESX.ShowFloatingHelpNotification(_U('open_mafia'), v.point)
-                    local elements = {
-                        { label = _U('inventory'), value = 'inventory' },
-                        { label = _U('boss_menu'), value = 'boss' }
-                    }
-
+                    ESX.ShowFloatingHelpNotification(_U('open_inv'), v.inV)
                     if IsControlJustPressed(0, 38) then
-                        ESX.UI.Menu.CloseAll()
-
-                        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'MafiaMenu',
-                        {
-                            title    = _U('mafia_menu'),
-                            align    = 'bottom-right',
-                            elements = elements
-                        }, function(data, menu)
-                            if data.current.value == 'inventory' then
-                                TriggerEvent('mafias:openArmory', v.job)
-                            elseif data.current.value == 'boss' then
-                                TriggerEvent('mafias:bossMenu')
-                            end
-                        end, function(data, menu)
-                            menu.close()
-                        end)
+                        TriggerEvent('mafias:openArmory', v.job)
                     end
-                end 
+                end
+
+                if boss then
+                    wait = 0
+                    ESX.ShowFloatingHelpNotification(_U('open_mafia'), v.bossM)
+                    if IsControlJustPressed(0, 38) then
+                        TriggerEvent('mafias:bossMenu', v.job)
+                    end
+                end
+
+                if cloakroom then
+                    wait = 0
+                    ESX.ShowFloatingHelpNotification(_U('open_cloak'), v.cloaK)
+                    if IsControlJustPressed(0, 38) then
+                        TriggerEvent('mafias:openCloakroom')
+                    end
+                end
             end
         end
-        Wait(wait)
+        Citizen.Wait(wait)
     end
 end)
 
-AddEventHandler("mafias:bossMenu", function()
+AddEventHandler("mafias:bossMenu", function(jobdata)
     if ESX.PlayerData.job and ESX.PlayerData.job.grade_name == "boss" then 
-
-        local elements = {
-            { label = _U('recruit_menu'), value = 'recruit' },
-            { label = _U('fire_menu'), value = 'fire' },
-            { label = _U('promote_menu'), value = 'promote' },
-            { label = _U('descend_menu'), value = 'descend' },
-        }
-
         ESX.UI.Menu.CloseAll()
 
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'BossMenu',
-        {
-            title    = _U('boss_menu'),
-            align    = 'bottom-right',
-            elements = elements
-        }, function(data, menu)
-            if data.current.value == 'recruit' then
-                TriggerEvent('mafias:bossActions', 'recruit')
-            elseif data.current.value == 'fire' then
-                TriggerEvent('mafias:bossActions', 'fire')
-            elseif data.current.value == 'promote' then
-                TriggerEvent('mafias:bossActions', 'promote')
-            elseif data.current.value == 'descend' then
-                TriggerEvent('mafias:bossActions', 'descend')
-            end
-        end, function(data, menu)
+        TriggerEvent('esx_society:openBossMenu', jobdata, function(data, menu)
             menu.close()
         end)
     else
@@ -91,45 +67,77 @@ AddEventHandler("mafias:bossMenu", function()
     end
 end)
 
-AddEventHandler('mafias:bossActions', function(jobdata)
-    if ESX.PlayerData.job and ESX.PlayerData.job.grade_name == 'boss' then 
-        local action = jobdata
-        if action == 'recruit' then
-            local job =  ESX.PlayerData.job.name
-            local grade = 0
-            local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-            if closestPlayer == -1 or closestDistance > 3.0 then
-                ESX.ShowNotification(_U('noplayersnearby'))
-            else
-                TriggerServerEvent('mafias:recruit', GetPlayerServerId(closestPlayer), job,grade)
-            end
-        elseif action == 'fire' then 
-            local job =  ESX.PlayerData.job.name
-            local grade = 0
-            local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-            if closestPlayer == -1 or closestDistance > 3.0 then
-                ESX.ShowNotification(_U('noplayersnearby'))
-            else
-                TriggerServerEvent('mafias:fire', GetPlayerServerId(closestPlayer))
-            end
-        elseif action == 'promote' then 
-            local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-            if closestPlayer == -1 or closestDistance > 3.0 then
-                ESX.ShowNotification(_U('noplayersnearby'))
-            else
-                TriggerServerEvent('mafias:promote', GetPlayerServerId(closestPlayer))
-            end
-        elseif action == 'descend' then 
-            local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-            if closestPlayer == -1 or closestDistance > 3.0 then
-                ESX.ShowNotification(_U('noplayersnearby'))
-            else
-                TriggerServerEvent('mafias:descend', GetPlayerServerId(closestPlayer))
-            end
-        else
-            ESX.ShowNotification(_U('not_boss'))
-        end
-    end
+AddEventHandler('mafias:openCloakroom', function()
+    local elements = {
+        {label = _U('player_clothes'), value = 'player_dressing'},
+        {label = _U('remove_cloth'), value = 'remove_cloth'}
+    }
+
+	ESX.UI.Menu.CloseAll()
+	
+	ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'Cloakroom', {
+		title    = _U('cloakroom'),
+		align    = 'bottom-right',
+		elements = elements
+	},	function(data, menu)
+		if data.current.value == 'player_dressing' then
+
+            ESX.TriggerServerCallback('esx_eden_clotheshop:getPlayerDressing', function(dressing)
+				local elements = {}
+
+				for i=1, #dressing, 1 do
+					table.insert(elements, {
+						label = dressing[i],
+						value = i
+					})
+				end
+
+				ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'player_dressing', {
+					title    = _U('player_clothes'),
+					align    = 'bottom-right',
+					elements = elements
+				}, function(data2, menu2)
+					TriggerEvent('skinchanger:getSkin', function(skin)
+						ESX.TriggerServerCallback('esx_eden_clotheshop:getPlayerOutfit', function(clothes)
+							TriggerEvent('skinchanger:loadClothes', skin, clothes)
+							TriggerEvent('esx_skin:setLastSkin', skin)
+
+							TriggerEvent('skinchanger:getSkin', function(skin)
+								TriggerServerEvent('esx_skin:save', skin)
+							end)
+						end, data2.current.value)
+					end)
+				end, function(data2, menu2)
+					menu2.close()
+				end)
+			end)
+		elseif data.current.value == 'remove_cloth' then
+			ESX.TriggerServerCallback('esx_property:getPlayerDressing', function(dressing)
+				local elements = {}
+
+				for i=1, #dressing, 1 do
+					table.insert(elements, {
+						label = dressing[i],
+						value = i
+					})
+				end
+
+				ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'remove_cloth', {
+					title = _U('remove_cloth'),
+					align = 'bottom-right',
+					elements = elements
+				}, function(data2, menu2)
+					menu2.close()
+					TriggerServerEvent('esx_property:removeOutfit', data2.current.value)
+					ESX.ShowNotification(_U('removed_cloth'))
+				end, function(data2, menu2)
+					menu2.close()
+				end)
+			end)
+		end
+	end, function(data, menu)
+        menu.close()
+    end)
 end)
 
 AddEventHandler('mafias:openArmory', function(invdata)
