@@ -23,7 +23,7 @@ CreateThread(function()
                 local _pos = GetEntityCoords(PlayerPedId())
                 local inventory = #(_pos - v.inV) < 3
                 local boss = #(_pos - v.bossM) < 3
-                local cloakroom = #(_pos - v.cloaK) < 3
+                local cloakroom = #(_pos - v.cloaK) < 2
 
                 if inventory then
                     wait = 0
@@ -55,12 +55,17 @@ CreateThread(function()
 end)
 
 AddEventHandler("mafias:bossMenu", function(jobdata)
+    -- DON'T SET THIS TO TRUE
+    local SocietyOptions = {
+        wash = false
+    }
+
     if ESX.PlayerData.job and ESX.PlayerData.job.grade_name == "boss" then 
         ESX.UI.Menu.CloseAll()
 
         TriggerEvent('esx_society:openBossMenu', jobdata, function(data, menu)
             menu.close()
-        end)
+        end, SocietyOptions)
     else
         ESX.ShowNotification(_U('not_boss'))
     end
