@@ -67,7 +67,7 @@ AddEventHandler("mafias:bossMenu", function(jobdata)
             menu.close()
         end, SocietyOptions)
     else
-        ESX.ShowNotification(_U('not_boss'))
+        TriggerEvent('mythic_notify:client:SendAlert', {type = 'error', text = _U('not_boss'), length = 2500})
     end
 end)
 
