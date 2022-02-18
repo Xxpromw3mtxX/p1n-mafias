@@ -14,4 +14,7 @@ Locales['it'] = {
 
     -- Boss related string
     ['not_boss'] = 'Non sei il capo!',
+
+    --Mafias labels
+    ['cartel'] = 'Cartello',
 }
